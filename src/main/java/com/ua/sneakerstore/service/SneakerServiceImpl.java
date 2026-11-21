@@ -6,6 +6,7 @@ import com.ua.sneakerstore.repository.SneakerRepository;
 import com.ua.sneakerstore.service.mapper.SneakerMapper;
 import com.ua.sneakerstore.web.dto.SneakerCardDto;
 import com.ua.sneakerstore.web.dto.SneakerDetailDto;
+import com.ua.sneakerstore.web.dto.SneakerRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,11 @@ public class SneakerServiceImpl implements SneakerService {
     }
 
     @Override
-    public List<SneakerCardDto> findAll() {
-        return repository.findAll().stream()
+    public List<SneakerCardDto> findAll(String category) {
+        List<Sneaker> sneakers = (category == null || category.isBlank())
+                ? repository.findAll()
+                : repository.findByCategory(category.trim());
+        return sneakers.stream()
                 .map(mapper::toCard)
                 .toList();
     }
@@ -33,5 +37,27 @@ public class SneakerServiceImpl implements SneakerService {
         Sneaker sneaker = repository.findById(id)
                 .orElseThrow(() -> new SneakerNotFoundException(id));
         return mapper.toDetail(sneaker);
+    }
+
+    @Override
+    public SneakerDetailDto create(SneakerRequest request) {
+        Sneaker sneaker = mapper.toDomain(request);
+        return mapper.toDetail(repository.save(sneaker));
+    }
+
+    @Override
+    public SneakerDetailDto update(Long id, SneakerRequest request) {
+        repository.findById(id)
+                .orElseThrow(() -> new SneakerNotFoundException(id));
+
+        Sneaker sneaker = mapper.toDomain(request).withId(id);
+        return mapper.toDetail(repository.save(sneaker));
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!repository.deleteById(id)) {
+            throw new SneakerNotFoundException(id);
+        }
     }
 }

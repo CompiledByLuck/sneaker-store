@@ -30,6 +30,14 @@ public class InMemorySneakerRepository implements SneakerRepository {
     }
 
     @Override
+    public List<Sneaker> findByCategory(String category) {
+        return storage.values().stream()
+                .filter(sneaker -> category.equalsIgnoreCase(sneaker.category()))
+                .sorted(Comparator.comparing(Sneaker::id))
+                .toList();
+    }
+
+    @Override
     public Sneaker save(Sneaker sneaker) {
         Objects.requireNonNull(sneaker, "Кросівки не можуть бути null");
 
@@ -42,5 +50,10 @@ public class InMemorySneakerRepository implements SneakerRepository {
 
         storage.put(sneakerToSave.id(), sneakerToSave);
         return sneakerToSave;
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return storage.remove(id) != null;
     }
 }

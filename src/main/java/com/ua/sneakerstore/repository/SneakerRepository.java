@@ -10,5 +10,9 @@ public interface SneakerRepository {
 
     Optional<Sneaker> findById(Long id);
 
+    List<Sneaker> findByCategory(String category);
+
     Sneaker save(Sneaker sneaker);
+
+    boolean deleteById(Long id);
 }
