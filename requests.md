@@ -41,16 +41,3 @@ curl -i http://localhost:8080/images/adidas-ultraboost.svg
 Очікується `200 OK` і тип вмісту `image/svg+xml`.
 
 Інші наявні зображення: `nike-pegasus.svg`, `puma-suede.svg`, `newbalance-574.svg`, `asics-gel-venture.svg`. Для кожної моделі також є файл `-detail.svg`.
-
-## 5. Windows PowerShell
-
-У PowerShell використовуйте `curl.exe`, щоб уникнути конфлікту з псевдонімом `curl`:
-
-```powershell
-curl.exe http://localhost:8080/api/sneakers
-curl.exe http://localhost:8080/api/sneakers/1
-curl.exe -i http://localhost:8080/api/sneakers/999
-curl.exe -i http://localhost:8080/images/adidas-ultraboost.svg
-```
-
-> На занятті 1.1 реалізовано лише читання (`GET`). Запитів `POST`, `PUT`, `PATCH` або `DELETE` у цьому проєкті немає.
